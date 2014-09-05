@@ -6,5 +6,15 @@ public class NetworkClient {
 		// TODO Auto-generated method stub
 
 	}
+	
 
+}
+class TCPClient implements Runnable{
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
+	}
+	
 }
