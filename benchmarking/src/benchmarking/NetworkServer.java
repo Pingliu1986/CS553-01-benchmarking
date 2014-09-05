@@ -1,23 +1,27 @@
 
 package benchmarking;
 
+import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 
 public class NetworkServer {
-	 ServerSocket ss;
-	 boolean serverlive=false;
+	 private static ServerSocket ss=null;
+	 private static boolean serverlive=false;
+	 private static final int threadnum=2;
+	 private static final TCPThread[] tcpthreads=new TCPThread[threadnum];
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		if(args[1]=="tcp"){
+		if(args[0]=="tcp"){
 		new NetworkServer().starttcp();// TODO Auto-generated method stub
 		}
-		else if(args[1]=="udp"){
+		else if(args[0]=="udp"){
 			
 		}
 	}
@@ -36,10 +40,12 @@ public class NetworkServer {
 
 }
 class TCPThread implements Runnable{
-	
+	private DataInputStream inputstream=null;
+	private PrintStream printstream = null;
+	private Socket clientsocket=null;
 	@Override
 	public void run() {
-		
+		 
 		
 	}
 	
