@@ -2,15 +2,20 @@ package benchmarking;
 
 import java.util.Random;
 
+import sun.awt.windows.ThemeReader;
+
 public class cpu {
 	
-	private static final int Threads=1;
+	private static final int Threads=8;
 	public static void main(String[] args) {
 		TaskThread taskThread=new TaskThread();
-		Thread aThread=new Thread(taskThread);
-		Thread bThread=new Thread(taskThread);
-		aThread.start();
-		bThread.start();
+		Thread[] threads=new Thread[Threads];
+		for(int i=0;i<Threads;i++){
+		threads[i]=new Thread(taskThread);
+		threads[i].start();
+		}
+		
+		//cThread.start();
 
 	}
 }
