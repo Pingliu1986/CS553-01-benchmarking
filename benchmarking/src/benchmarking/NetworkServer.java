@@ -15,14 +15,14 @@ public class NetworkServer {
 	 private static boolean serverlive=false;
 	 private static final int threadnum=2;
 	 private static final TCPThread[] tcpthreads=new TCPThread[threadnum];
-
+	 static int buffersize=0;
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		
 		if(args[0].equals("tcp")){
-			
+		buffersize=Integer.parseInt(args[1]);	
 		new NetworkServer().starttcp();// TODO Auto-generated method stub
 		
 		}
@@ -63,6 +63,7 @@ public class NetworkServer {
 
 }
 class TCPThread implements Runnable{
+	private static final int buffersize = NetworkServer.buffersize;
 	private DataInputStream inputstream=null;
 	private PrintStream printstream = null;
 	private Socket clientsocket=null;
@@ -74,8 +75,8 @@ class TCPThread implements Runnable{
 	public void run() {
 		 System.out.println("server start");
 		try {
-			infromclient=new BufferedReader(new InputStreamReader(clientsocket.getInputStream()));
-			
+			infromclient=new BufferedReader(new InputStreamReader(clientsocket.getInputStream()),buffersize);
+			System.out.println(infromclient.readLine());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
