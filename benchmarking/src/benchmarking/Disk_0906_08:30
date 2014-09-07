@@ -1,0 +1,134 @@
+//这次读和写都有了，放在两个函数里面了
+//我再想想怎么做并发线程
+
+package com.Cloud_Computing;
+import java.io.*;
+import java.util.*;
+
+public class Test_Disk {
+	public static void main(String[] args){
+		String tread_1="tread_1";
+		Thread_Disk treaddisk=null;
+		treaddisk=new Thread_Disk(tread_1);
+		Thread test1=new Thread(treaddisk);
+		test1.start();
+	}
+
+}
+
+class Thread_Disk implements Runnable{
+	
+	String tread_name=null;
+	File ff=new File("d:\\a.txt");
+	public Random randGen = null;
+	public char[] numbersAndLetters = null;
+
+	public Thread_Disk(String tread_name){
+		
+		this.tread_name=tread_name;
+		
+	}
+	@Override
+	public void run() {
+		// TODO 自动生成的方法存根
+		this.WriteOnDisk();
+		this.ReadOnDisk();
+	}
+	//写到硬盘上
+	public String WriteOnDisk(){
+		int length=1024*1024;
+		String dur=null;
+		String string_file=this.randomString(length);
+		if(!ff.exists()){
+			try {
+				ff.createNewFile();
+			} catch (IOException e) {
+				// TODO 自动生成的 catch 块
+				e.printStackTrace();
+			}
+		}
+		FileOutputStream fos=null;
+		try {
+			fos=new FileOutputStream(ff);
+			long start=System.currentTimeMillis();
+			fos.write(string_file.getBytes());
+			long end=System.currentTimeMillis();
+			dur=end-start+"";
+		} catch (IOException e) {
+			// TODO 自动生成的 catch 块
+			e.printStackTrace();
+		} finally{
+			try {
+				fos.close();
+				System.out.println("For "+this.tread_name);
+				System.out.println("The running time of writing on disk is"+" "+dur);
+			} catch (IOException e) {
+				// TODO 自动生成的 catch 块
+				e.printStackTrace();
+				
+			}
+		}					
+		return dur;
+		
+	}
+	@SuppressWarnings("finally")
+	public String ReadOnDisk(){
+		String dur=null;
+		int n=0;
+		byte ReadBytes[]=new byte[1024];
+		FileInputStream fis=null;
+		try {
+			fis=new FileInputStream(ff);
+			long start=System.currentTimeMillis();
+			System.out.println("The start time is "+start);
+			while((n=fis.read(ReadBytes))!=-1){
+				//把字节转成String
+				String s=new String(ReadBytes,0,n);
+//				System.out.println(s);
+			}
+			long end=System.currentTimeMillis();
+			System.out.println("The end time is "+end);
+			dur=end-start+"";
+			
+
+		} catch (FileNotFoundException e) {
+			// TODO 自动生成的 catch 块
+			e.printStackTrace();
+		}finally{
+			try {
+				
+				fis.close();
+				
+			} catch (IOException e) {
+				// TODO 自动生成的 catch 块
+				e.printStackTrace();
+			}finally{
+				System.out.println("The running time of reading on disk is"+" "+dur);
+				return dur;
+			}
+			
+		}
+
+		
+		
+	}
+	//产生随机字符串，通过length,定义长度
+	public final String randomString(int length) {
+        if (length < 1) {
+            return null;
+        }
+        if (randGen == null) {
+               randGen = new Random();
+               numbersAndLetters = ("0123456789abcdefghijklmnopqrstuvwxyz" +
+                  "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ").toCharArray();             
+                }
+        char [] randBuffer = new char[length];
+        for (int i=0; i<randBuffer.length; i++) {
+            randBuffer[i] = numbersAndLetters[randGen.nextInt(71)];
+         //randBuffer[i] = numbersAndLetters[randGen.nextInt(35)];
+        }
+        return new String(randBuffer);
+}
+		
+}
+
